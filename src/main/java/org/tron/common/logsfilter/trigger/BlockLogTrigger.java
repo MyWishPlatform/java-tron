@@ -20,7 +20,7 @@ public class BlockLogTrigger extends Trigger {
 
   @Getter
   @Setter
-  private List<String> transactionList = new ArrayList<>();
+  private List<TransactionLogTrigger> transactionList = new ArrayList<>();
 
   public BlockLogTrigger() {
     setTriggerName(Trigger.BLOCK_TRIGGER_NAME);

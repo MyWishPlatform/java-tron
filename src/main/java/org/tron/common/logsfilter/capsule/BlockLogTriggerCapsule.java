@@ -6,6 +6,8 @@ import org.tron.common.logsfilter.EventPluginLoader;
 import org.tron.common.logsfilter.trigger.BlockLogTrigger;
 import org.tron.core.capsule.BlockCapsule;
 
+import java.util.stream.Collectors;
+
 public class BlockLogTriggerCapsule extends TriggerCapsule {
   @Getter
   @Setter
@@ -17,11 +19,16 @@ public class BlockLogTriggerCapsule extends TriggerCapsule {
     blockLogTrigger.setTimeStamp(block.getTimeStamp());
     blockLogTrigger.setBlockNumber(block.getNum());
     blockLogTrigger.setTransactionSize(block.getTransactions().size());
-    block.getTransactions()
+    block.getTransactions().forEach(trx ->
+        blockLogTrigger.getTransactionList().add(trx.getTransactionId().toString())
+    );
+
+    blockLogTrigger.setTransactions(
+        block.getTransactions()
         .stream()
         .map(trx -> new TransactionLogTriggerCapsule(trx, block))
         .map(TransactionLogTriggerCapsule::getTransactionLogTrigger)
-        .forEach(trxLogTrigger -> blockLogTrigger.getTransactionList().add(trxLogTrigger));
+        .collect(Collectors.toList()));
   }
 
   @Override
